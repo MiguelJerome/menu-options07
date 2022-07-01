@@ -6,6 +6,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +18,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+// Neme: Miguel Jerome
+// Numero etudiant: 2001326
+// classe: IFM25907-030-P2022
 
 public class MainActivity extends AppCompatActivity {
     // Définition des différents modes opératoires du toucher
@@ -29,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
     // Liste des ImageView instanciés durant l'exécution
     private List<ImageView> listeDroids = new ArrayList<ImageView>();
 
+
+    private Menu menu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Installer un listener sur le layout de fond d'activité pour gérer
         // la manipulation des droids
-        ConstraintLayout layout = findViewById(R.id.mainLayout);
+        ConstraintLayout layout = findViewById(R.id.main_Layout);
         layout.setOnTouchListener(new ConstraintLayout.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent ev) {
                 // Gérer la sélection et le déplacement des droids
@@ -114,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         final int droidSize = 144;
 
         // Obtenir le layout racine auquel on va ajouter un nouveau ImageView
-        ConstraintLayout layout = findViewById(R.id.mainLayout);
+        ConstraintLayout layout = findViewById(R.id.main_Layout);
 
         // Créer un ImageView et lui attribuer l'image du droid récupéré des ressources
         ImageView droid = new ImageView(this);
@@ -188,4 +197,41 @@ public class MainActivity extends AppCompatActivity {
         else
             tv.setText("DROP");
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // une classe qui permet de lire un fichier xml
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        this.menu = menu;
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        ConstraintLayout layout = findViewById(R.id.main_Layout);
+
+        /*
+        menu.findItem(R.id.itemMenuRouge).setChecked(false);
+        menu.findItem(R.id.itemMenuVert).setChecked(false);
+        menu.findItem(R.id.itemMenuBleu).setChecked(false);
+         */
+
+        item.setChecked(true);
+        switch (item.getItemId())
+        {
+            case R.id.dragButtonID:
+                setMode(ModeDeToucher.drag);
+                return true;
+            case R.id.dropButtonID:
+                setMode(ModeDeToucher.drop);
+                return true;
+            default:
+                // si j ai pas gerer la selection faite, je vais retourner ce que la classe au desssus quand elle recoit
+                // onOptionsItemSelected
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
 }
